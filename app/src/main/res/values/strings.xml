@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Star Wars Wiki</string>
+
+    <!--  Menu  -->
+    <string name="menu_search">Поиск</string>
+    <string name="menu_favourites">Избранное</string>
+
+    <!--  Main Screen  -->
+    <string name="main_search_hint">Поиск по персонажам и звездолётам</string>
+
+    <!--  Search item  -->
+    <string name="search_title">Заголовок</string>
+    <string name="search_gender">пол</string>
+    <string name="search_count_starships">кол-во управляемых звездолётов</string>
+    <string name="search_model">модель</string>
+    <string name="search_manufacturer">производитель</string>
+    <string name="search_passengers">кол-во пассажиров</string>
+
+    <!--  Favourites Screen  -->
+    <string name="favourites_search">Поиск по избранному</string>
+    <string name="favourites_title_film">Фильмы</string>
+    <string name="favourites_subtitle_film">Где появляются избранные персонажи и звездолеты</string>
+    <string name="favourites_title_fav">Избранное</string>
+    <string name="temp_text">Временный текст</string>
+
+</resources>
