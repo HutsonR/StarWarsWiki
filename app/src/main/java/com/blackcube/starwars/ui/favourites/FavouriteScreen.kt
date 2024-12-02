@@ -1,4 +1,4 @@
-package com.blackcube.starwars.ui.home
+package com.blackcube.starwars.ui.favourites
 
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
@@ -51,9 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.blackcube.starwars.R
-import com.blackcube.starwars.ui.Screens
 import com.blackcube.starwars.ui.common.models.CompositeItem
 import com.blackcube.starwars.ui.common.components.SearchBar
 import com.blackcube.starwars.ui.common.components.TextSwitch
@@ -65,18 +63,19 @@ import com.blackcube.starwars.ui.home.store.models.HomeState
 import com.blackcube.starwars.ui.common.utils.CollectEffect
 import com.blackcube.starwars.ui.common.utils.CollectUpdater
 import com.blackcube.starwars.ui.common.utils.UpdateNotifier
+import com.blackcube.starwars.ui.favourites.store.models.FavouriteEffect
+import com.blackcube.starwars.ui.favourites.store.models.FavouriteIntent
+import com.blackcube.starwars.ui.favourites.store.models.FavouriteState
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun HomeScreenRoot(
-    navController: NavController,
-    viewModel: HomeViewModel = hiltViewModel()
+fun FavouriteScreenRoot(
+    viewModel: FavouriteViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val effects = viewModel.effect
 
-    HomeScreen(
-        navController = navController,
+    FavouriteScreen(
         state = state,
         effects = effects,
         onIntent = viewModel::handleIntent
@@ -84,33 +83,29 @@ fun HomeScreenRoot(
 }
 
 @Composable
-fun HomeScreen(
-    navController: NavController,
-    state: HomeState,
-    effects: Flow<HomeEffect>,
-    onIntent: (HomeIntent) -> Unit
+fun FavouriteScreen(
+    state: FavouriteState,
+    effects: Flow<FavouriteEffect>,
+    onIntent: (FavouriteIntent) -> Unit
 ) {
-    val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
 
     CollectUpdater(
         updateFlow = UpdateNotifier.updateFlow,
         resetEvent = UpdateNotifier.UpdateEvent.None
     ) { event ->
-        if (event is UpdateNotifier.UpdateEvent.FromFavourite) {
+        if (event is UpdateNotifier.UpdateEvent.FromHome) {
             UpdateNotifier.resetUpdate()
-            onIntent(HomeIntent.UpdateList)
+            onIntent(FavouriteIntent.UpdateList)
         }
     }
 
     CollectEffect(effects) { effect ->
         when (effect) {
-            is HomeEffect.ShowToast -> {
+            is FavouriteEffect.ShowToast -> {
                 Toast.makeText(context, effect.message, Toast.LENGTH_LONG).show()
             }
-            is HomeEffect.NavigateToDetails -> {
-                navController.navigate(Screens.Details.route) // todo как-то передать id item
-            }
+            else -> Unit
         }
     }
 
@@ -128,7 +123,7 @@ fun HomeScreen(
                 ,
                 value = state.searchQuery,
                 onValueChange = { query ->
-                    onIntent(HomeIntent.SearchQueryChanged(query))
+                    onIntent(FavouriteIntent.SearchQueryChanged(query))
                 },
                 onSearch = { }
             )
@@ -158,7 +153,7 @@ fun HomeScreen(
                                 starshipsCount = item.starshipsCount,
                                 date = item.date,
                                 isFavourite = item.isFavourite,
-                                onFavouriteClick = { onIntent(HomeIntent.OnFavouriteClick(item.url, CompositeItemType.People)) }
+                                onFavouriteClick = { onIntent(FavouriteIntent.OnFavouriteClick(item.url, CompositeItemType.People)) }
                             )
                         }
                         is CompositeItem.StarshipItem -> {
@@ -168,7 +163,7 @@ fun HomeScreen(
                                 passengers = item.passengers,
                                 pilots = item.pilots,
                                 isFavourite = item.isFavourite,
-                                onFavouriteClick = { onIntent(HomeIntent.OnFavouriteClick(item.url, CompositeItemType.Starship)) }
+                                onFavouriteClick = { onIntent(FavouriteIntent.OnFavouriteClick(item.url, CompositeItemType.Starship)) }
                             )
                         }
                     }
@@ -185,7 +180,6 @@ private fun PeopleItem(
     starshipsCount: String,
     date: String,
     isFavourite: Boolean,
-//    onItemClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
     Box(
@@ -328,6 +322,7 @@ fun AnimatedFavoriteButton(
         }
     }
 }
+
 
 @Composable
 private fun RowTextItem(infoField: String, field: String, modifier: Modifier = Modifier) {

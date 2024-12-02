@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    alias(libs.plugins.room)
     alias(libs.plugins.hilt)
 }
 
@@ -16,6 +17,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        room { schemaDirectory("$projectDir/schemas") }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -80,4 +83,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Room
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 }

@@ -1,5 +1,6 @@
 package com.blackcube.starwars.remote.impl.models
 
+import com.blackcube.starwars.domain.models.PeopleModel
 import com.google.gson.annotations.SerializedName
 
 data class PeopleApiModel(
@@ -36,3 +37,23 @@ data class PeopleApiModel(
     @SerializedName("vehicles")
     val vehicles: List<String>
 )
+
+fun PeopleApiModel.mapToPeopleModel(): PeopleModel =
+    PeopleModel(
+        birthYear,
+        created,
+        edited,
+        eyeColor,
+        films,
+        gender,
+        hairColor,
+        height,
+        homeWorld,
+        mass,
+        name,
+        skinColor,
+        species,
+        starships,
+        url,
+        vehicles
+    )

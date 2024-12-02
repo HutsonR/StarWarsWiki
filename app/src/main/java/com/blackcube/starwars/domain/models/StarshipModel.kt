@@ -1,6 +1,8 @@
 package com.blackcube.starwars.domain.models
 
-data class StarShipModel(
+import com.blackcube.starwars.local.impl.database.models.StarshipItemDto
+
+data class StarshipModel(
     val MGLT: String,
     val cargoCapacity: String,
     val consumables: String,
@@ -19,4 +21,9 @@ data class StarShipModel(
     val pilots: List<Any>,
     val starshipClass: String,
     val url: String,
+    val isFavourite: Boolean = false
+)
+
+fun StarshipModel.mapToDto() = StarshipItemDto(
+    url = url
 )

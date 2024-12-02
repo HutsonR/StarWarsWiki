@@ -1,5 +1,7 @@
 package com.blackcube.starwars.domain.models
 
+import com.blackcube.starwars.local.impl.database.models.PeopleItemDto
+
 data class PeopleModel(
     val birthYear: String,
     val created: String,
@@ -16,5 +18,10 @@ data class PeopleModel(
     val species: List<Any>,
     val starships: List<String>,
     val url: String,
-    val vehicles: List<String>
+    val vehicles: List<String>,
+    val isFavourite: Boolean = false
+)
+
+fun PeopleModel.mapToDto() = PeopleItemDto(
+    url = url
 )
