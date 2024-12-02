@@ -4,17 +4,18 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
-abstract class BaseViewModel<State, Actions>(initialState: State) : ViewModel() {
+abstract class BaseViewModel<State, Effects>(initialState: State) : ViewModel() {
 
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
     val state: StateFlow<State> = _state
 
-    private val _action: MutableSharedFlow<Actions> = MutableSharedFlow(replay = 1)
-    val action: Flow<Actions> = _action.onEach { _action.resetReplayCache() }
+    private val _effects: MutableSharedFlow<Effects> = MutableSharedFlow(replay = 1)
+    val effect: Flow<Effects> = _effects.onEach { _effects.resetReplayCache() }
 
     /**
      * Получение internalState
@@ -33,10 +34,10 @@ abstract class BaseViewModel<State, Actions>(initialState: State) : ViewModel() 
     }
 
     /**
-     * Отправка события
+     * Отправка одноразового события (эффекта)
      */
-    protected fun onAction(action: Actions) {
-        _action.tryEmit(action)
+    protected fun effect(effect: Effects) {
+        _effects.tryEmit(effect)
     }
 
 }

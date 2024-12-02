@@ -1,7 +1,9 @@
 package com.blackcube.starwars.data.di
 
-import com.blackcube.starwars.data.repositories.StarWarsRepositoryImpl
-import com.blackcube.starwars.domain.repositories.StarWarsRepository
+import com.blackcube.starwars.data.repositories.PeopleRepositoryImpl
+import com.blackcube.starwars.data.repositories.StarshipRepositoryImpl
+import com.blackcube.starwars.domain.repositories.PeopleRepository
+import com.blackcube.starwars.domain.repositories.StarshipRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,6 +16,10 @@ interface DataModule {
 
     @Binds
     @Singleton
-    fun bindStarWarsRepository(starWarsRepositoryImpl: StarWarsRepositoryImpl): StarWarsRepository
+    fun bindPeopleRepository(peopleRepositoryImpl: PeopleRepositoryImpl): PeopleRepository
+
+    @Binds
+    @Singleton
+    fun bindStarshipRepository(starshipRepositoryImpl: StarshipRepositoryImpl): StarshipRepository
 
 }

@@ -1,8 +1,9 @@
 package com.blackcube.starwars.remote.impl.models
 
+import com.blackcube.starwars.domain.models.StarshipModel
 import com.google.gson.annotations.SerializedName
 
-data class StarShipApiModel(
+data class StarshipApiModel(
     @SerializedName("MGLT")
     val MGLT: String,
     @SerializedName("cargo_capacity")
@@ -40,3 +41,25 @@ data class StarShipApiModel(
     @SerializedName("url")
     val url: String,
 )
+
+fun StarshipApiModel.mapToStarShipModel(): StarshipModel =
+    StarshipModel(
+        MGLT,
+        cargoCapacity,
+        consumables,
+        costInCredits,
+        created,
+        crew,
+        edited,
+        films,
+        hyperDriveRating,
+        length,
+        manufacturer,
+        maxAtmospheringSpeed,
+        model,
+        name,
+        passengers,
+        pilots,
+        starshipClass,
+        url
+    )
