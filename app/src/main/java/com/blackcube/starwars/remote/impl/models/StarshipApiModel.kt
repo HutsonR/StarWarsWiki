@@ -35,7 +35,7 @@ data class StarshipApiModel(
     @SerializedName("passengers")
     val passengers: String,
     @SerializedName("pilots")
-    val pilots: List<Any>,
+    val pilots: List<String>,
     @SerializedName("starship_class")
     val starshipClass: String,
     @SerializedName("url")

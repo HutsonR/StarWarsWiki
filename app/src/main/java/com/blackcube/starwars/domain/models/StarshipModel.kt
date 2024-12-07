@@ -1,7 +1,9 @@
 package com.blackcube.starwars.domain.models
 
 import com.blackcube.starwars.local.impl.database.models.StarshipItemDto
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class StarshipModel(
     val MGLT: String,
     val cargoCapacity: String,
@@ -18,11 +20,11 @@ data class StarshipModel(
     val model: String,
     val name: String,
     val passengers: String,
-    val pilots: List<Any>,
+    val pilots: List<String>,
     val starshipClass: String,
     val url: String,
     val isFavourite: Boolean = false
-)
+): DomainModel()
 
 fun StarshipModel.mapToDto() = StarshipItemDto(
     url = url

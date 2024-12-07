@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,7 +52,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.blackcube.starwars.R
+import com.blackcube.starwars.ui.Screens
 import com.blackcube.starwars.ui.common.models.CompositeItem
 import com.blackcube.starwars.ui.common.components.SearchBar
 import com.blackcube.starwars.ui.common.components.TextSwitch
@@ -70,12 +73,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun FavouriteScreenRoot(
+    navController: NavController,
     viewModel: FavouriteViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val effects = viewModel.effect
 
     FavouriteScreen(
+        navController = navController,
         state = state,
         effects = effects,
         onIntent = viewModel::handleIntent
@@ -84,6 +89,7 @@ fun FavouriteScreenRoot(
 
 @Composable
 fun FavouriteScreen(
+    navController: NavController,
     state: FavouriteState,
     effects: Flow<FavouriteEffect>,
     onIntent: (FavouriteIntent) -> Unit
@@ -105,7 +111,10 @@ fun FavouriteScreen(
             is FavouriteEffect.ShowToast -> {
                 Toast.makeText(context, effect.message, Toast.LENGTH_LONG).show()
             }
-            else -> Unit
+
+            is FavouriteEffect.NavigateToDetails -> {
+                navController.navigate(Screens.Details.createRoute(effect.id))
+            }
         }
     }
 
@@ -153,6 +162,7 @@ fun FavouriteScreen(
                                 starshipsCount = item.starshipsCount,
                                 date = item.date,
                                 isFavourite = item.isFavourite,
+                                onItemClick = { onIntent(FavouriteIntent.OnItemClick(item.url)) },
                                 onFavouriteClick = { onIntent(FavouriteIntent.OnFavouriteClick(item.url, CompositeItemType.People)) }
                             )
                         }
@@ -163,6 +173,7 @@ fun FavouriteScreen(
                                 passengers = item.passengers,
                                 pilots = item.pilots,
                                 isFavourite = item.isFavourite,
+                                onItemClick = { onIntent(FavouriteIntent.OnItemClick(item.url)) },
                                 onFavouriteClick = { onIntent(FavouriteIntent.OnFavouriteClick(item.url, CompositeItemType.Starship)) }
                             )
                         }
@@ -180,6 +191,7 @@ private fun PeopleItem(
     starshipsCount: String,
     date: String,
     isFavourite: Boolean,
+    onItemClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
     Box(
@@ -190,7 +202,9 @@ private fun PeopleItem(
             .padding(all = 16.dp)
     ) {
         // Колонка для текстовых элементов
-        Column {
+        Column(
+            modifier = Modifier.clickable { onItemClick.invoke() }
+        ) {
             Text(
                 modifier = Modifier.padding(bottom = 12.dp),
                 text = name,
@@ -235,6 +249,7 @@ private fun StarshipItem(
     passengers: String,
     pilots: String,
     isFavourite: Boolean,
+    onItemClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
     Box(
@@ -245,7 +260,9 @@ private fun StarshipItem(
             .padding(all = 16.dp)
     ) {
         // Колонка для текстовых элементов
-        Column {
+        Column(
+            modifier = Modifier.clickable { onItemClick.invoke() }
+        ) {
             Text(
                 modifier = Modifier.padding(bottom = 12.dp),
                 text = name,
@@ -344,38 +361,6 @@ private fun RowTextItem(infoField: String, field: String, modifier: Modifier = M
     }
 }
 
-@Composable
-private fun CloseButton(modifier: Modifier = Modifier) {
-//    val rootController = LocalRootController.current
-    MapControlButton(
-        icon = Icons.Default.Close,
-        onClick = {
-//            rootController.popBackStack()
-        },
-        modifier = modifier,
-    )
-}
-
-@Composable
-private fun MapControlButton(
-    icon: ImageVector,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) = OutlinedButton(
-    shape = CircleShape,
-    onClick = onClick,
-    modifier = modifier
-        .padding(bottom = 24.dp)
-        .padding(horizontal = 16.dp)
-        .size(64.dp),
-) {
-    Icon(
-        icon,
-        contentDescription = null,
-        tint = Color(0xFF196DFF),
-    )
-}
-
 @Preview
 @Composable
 private fun TextSwitchTest() {
@@ -404,6 +389,7 @@ private fun ShowPeopleItem() {
         "21",
         "21.10.2003",
         false,
+        {},
         {}
     )
 }
@@ -417,6 +403,7 @@ private fun ShowStarshipItem() {
         "8",
         "1",
         true,
+        {},
         {}
     )
 }

@@ -63,7 +63,7 @@ fun MainScreen(
 
                 when(tabIndex) {
                     0 -> HomeScreenRoot(navController)
-                    1 -> FavouriteScreenRoot()
+                    1 -> FavouriteScreenRoot(navController)
                 }
             }
         }

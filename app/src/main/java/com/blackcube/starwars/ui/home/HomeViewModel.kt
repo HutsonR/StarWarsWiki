@@ -1,7 +1,10 @@
 package com.blackcube.starwars.ui.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.blackcube.starwars.core.BaseViewModel
+import com.blackcube.starwars.domain.models.PeopleModel
+import com.blackcube.starwars.domain.models.StarshipModel
 import com.blackcube.starwars.domain.usecases.api.PeopleUseCase
 import com.blackcube.starwars.domain.usecases.api.StarshipsUseCase
 import com.blackcube.starwars.ui.common.models.CompositeItem
@@ -66,13 +69,19 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.SearchQueryChanged -> {
                 if (items.isNotEmpty()) onSearchQueryChanged(homeIntent.query)
             }
+
             is HomeIntent.OnFavouriteClick -> {
                 onFavouriteClicked(
                     homeIntent.url,
                     homeIntent.itemType
                 )
             }
+
             is HomeIntent.UpdateList -> update()
+
+            is HomeIntent.OnItemClick -> {
+                effect(HomeEffect.NavigateToDetails(homeIntent.itemId))
+            }
         }
     }
 
