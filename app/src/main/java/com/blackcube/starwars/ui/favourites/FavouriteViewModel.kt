@@ -1,6 +1,5 @@
 package com.blackcube.starwars.ui.favourites
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.blackcube.starwars.core.BaseViewModel
 import com.blackcube.starwars.domain.usecases.api.PeopleUseCase
@@ -76,6 +75,8 @@ class FavouriteViewModel @Inject constructor(
             }
 
             FavouriteIntent.UpdateList -> update()
+
+            is FavouriteIntent.OnItemClick -> effect(FavouriteEffect.NavigateToDetails(favouriteIntent.itemId))
         }
     }
 

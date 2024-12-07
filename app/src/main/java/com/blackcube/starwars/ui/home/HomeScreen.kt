@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -108,8 +109,9 @@ fun HomeScreen(
             is HomeEffect.ShowToast -> {
                 Toast.makeText(context, effect.message, Toast.LENGTH_LONG).show()
             }
+
             is HomeEffect.NavigateToDetails -> {
-                navController.navigate(Screens.Details.route) // todo как-то передать id item
+                navController.navigate(Screens.Details.createRoute(effect.id))
             }
         }
     }
@@ -158,6 +160,7 @@ fun HomeScreen(
                                 starshipsCount = item.starshipsCount,
                                 date = item.date,
                                 isFavourite = item.isFavourite,
+                                onItemClick = { onIntent(HomeIntent.OnItemClick(item.url)) },
                                 onFavouriteClick = { onIntent(HomeIntent.OnFavouriteClick(item.url, CompositeItemType.People)) }
                             )
                         }
@@ -168,6 +171,7 @@ fun HomeScreen(
                                 passengers = item.passengers,
                                 pilots = item.pilots,
                                 isFavourite = item.isFavourite,
+                                onItemClick = { onIntent(HomeIntent.OnItemClick(item.url)) },
                                 onFavouriteClick = { onIntent(HomeIntent.OnFavouriteClick(item.url, CompositeItemType.Starship)) }
                             )
                         }
@@ -185,7 +189,7 @@ private fun PeopleItem(
     starshipsCount: String,
     date: String,
     isFavourite: Boolean,
-//    onItemClick: () -> Unit,
+    onItemClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
     Box(
@@ -196,7 +200,9 @@ private fun PeopleItem(
             .padding(all = 16.dp)
     ) {
         // Колонка для текстовых элементов
-        Column {
+        Column (
+            modifier = Modifier.clickable { onItemClick.invoke() }
+        ) {
             Text(
                 modifier = Modifier.padding(bottom = 12.dp),
                 text = name,
@@ -241,6 +247,7 @@ private fun StarshipItem(
     passengers: String,
     pilots: String,
     isFavourite: Boolean,
+    onItemClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
     Box(
@@ -251,7 +258,9 @@ private fun StarshipItem(
             .padding(all = 16.dp)
     ) {
         // Колонка для текстовых элементов
-        Column {
+        Column (
+            modifier = Modifier.clickable { onItemClick.invoke() }
+        ) {
             Text(
                 modifier = Modifier.padding(bottom = 12.dp),
                 text = name,
@@ -409,6 +418,7 @@ private fun ShowPeopleItem() {
         "21",
         "21.10.2003",
         false,
+        {},
         {}
     )
 }
@@ -422,6 +432,7 @@ private fun ShowStarshipItem() {
         "8",
         "1",
         true,
+        {},
         {}
     )
 }

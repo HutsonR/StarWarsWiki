@@ -1,7 +1,10 @@
 package com.blackcube.starwars.domain.models
 
+import android.os.Parcelable
 import com.blackcube.starwars.local.impl.database.models.PeopleItemDto
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class PeopleModel(
     val birthYear: String,
     val created: String,
@@ -15,12 +18,12 @@ data class PeopleModel(
     val mass: String,
     val name: String,
     val skinColor: String,
-    val species: List<Any>,
+    val species: List<String>,
     val starships: List<String>,
     val url: String,
     val vehicles: List<String>,
     val isFavourite: Boolean = false
-)
+): DomainModel()
 
 fun PeopleModel.mapToDto() = PeopleItemDto(
     url = url

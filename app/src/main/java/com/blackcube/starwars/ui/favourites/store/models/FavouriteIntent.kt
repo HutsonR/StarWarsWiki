@@ -10,6 +10,10 @@ sealed interface FavouriteIntent {
         val itemType: CompositeItemType
     ) : FavouriteIntent
 
+    data class OnItemClick(
+        val itemId: String
+    ) : FavouriteIntent
+
     data class SearchQueryChanged(
         val query: String
     ) : FavouriteIntent

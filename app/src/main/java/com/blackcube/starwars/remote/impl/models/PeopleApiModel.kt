@@ -29,7 +29,7 @@ data class PeopleApiModel(
     @SerializedName("skin_color")
     val skinColor: String,
     @SerializedName("species")
-    val species: List<Any>,
+    val species: List<String>,
     @SerializedName("starships")
     val starships: List<String>,
     @SerializedName("url")
