@@ -15,6 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.blackcube.starwars.ui.Screens
+import com.blackcube.starwars.ui.auth.AuthScreen
+import com.blackcube.starwars.ui.auth.AuthScreenRoot
 import com.blackcube.starwars.ui.common.MainScreen
 import com.blackcube.starwars.ui.details.DetailsScreenRoot
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,8 +33,11 @@ class MainActivity : ComponentActivity() {
             navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = Screens.MainScreen.route
+                startDestination = Screens.AuthScreen.route
             ) {
+                composable(Screens.AuthScreen.route) {
+                    AuthScreenRoot(navController = navController)
+                }
                 composable(Screens.MainScreen.route) {
                     MainScreen(navController = navController)
                 }
