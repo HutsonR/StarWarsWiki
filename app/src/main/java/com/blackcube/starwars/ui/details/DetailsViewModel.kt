@@ -50,18 +50,6 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    fun handleIntent(detailsIntent: DetailsIntent) {
-        when (detailsIntent) {
-            is DetailsIntent.OnFavouriteClick -> {
-                onFavouriteClicked(detailsIntent.url, detailsIntent.itemType)
-            }
-        }
-    }
+    fun handleIntent(detailsIntent: DetailsIntent) = Unit
 
-    private fun onFavouriteClicked(
-        url: String,
-        itemType: CompositeItemType
-    ) {
-
-    }
 }

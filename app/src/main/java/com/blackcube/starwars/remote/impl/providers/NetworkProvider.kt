@@ -1,13 +1,15 @@
 package com.blackcube.starwars.remote.impl.providers
 
+import android.content.Context
 import com.blackcube.starwars.remote.impl.api.StarWarsApi
+import com.blackcube.starwars.remote.impl.interceptors.MockInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class NetworkProvider @Inject constructor() {
+class NetworkProvider @Inject constructor(private val context: Context) {
     private val provider: Retrofit
 
     init {
@@ -17,7 +19,11 @@ class NetworkProvider @Inject constructor() {
     private fun createProvider(): Retrofit {
         val logger = HttpLoggingInterceptor()
         logger.level = HttpLoggingInterceptor.Level.BODY
+
+        val mockInterceptor = MockInterceptor(context)
+
         val client = OkHttpClient.Builder()
+            .addInterceptor(mockInterceptor)
             .addInterceptor(logger)
             .build()
 
